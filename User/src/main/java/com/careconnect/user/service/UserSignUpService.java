@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -20,7 +21,7 @@ public class UserSignUpService {
         User user = new User();
 
         user.setUserPhoneId(userPhoneId);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(password));
         user.setName(name);
         user.setEmail(email);
         user.setAddress(address);
@@ -31,5 +32,18 @@ public class UserSignUpService {
         user.setUpdateDate(updateDate);
 
         this.userRepository.save(user);
+    }
+
+    public void withdraw(String userPhoneId) {
+        Optional<User> userOptional = Optional.ofNullable(userRepository.findByUserPhoneId(userPhoneId));
+
+        // 사용자가 존재하는지 확인
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            userRepository.delete(user);
+        } else {
+            System.out.println("No user found with userPhoneId: " + userPhoneId);
+            throw new RuntimeException("No user found with userPhoneId: " + userPhoneId);
+        }
     }
 }

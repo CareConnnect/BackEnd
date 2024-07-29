@@ -4,19 +4,17 @@ import com.careconnect.user.DTO.UserSignUpDTO;
 import com.careconnect.user.service.UserSignUpService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/account")
 public class UserSignUpController {
-    private UserSignUpService userSignUpService;
+    private final UserSignUpService userSignUpService;
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/signup")
@@ -37,5 +35,16 @@ public class UserSignUpController {
                 userSignUpDTO.getSelfIntroduction(), userSignUpDTO.getSignupDate(), userSignUpDTO.getUpdateDate());
 
         return "회원 가입 성공!!";
+    }
+
+    @DeleteMapping("/withdraw")
+    public ResponseEntity<String> withdraw(@RequestBody UserSignUpDTO userSignUpDTO) {
+        try {
+            userSignUpService.withdraw(userSignUpDTO.getUserPhoneId());
+
+            return ResponseEntity.ok().body("User with userPhoneId " + userSignUpDTO.getUserPhoneId() + " has been successfully deleted.");
+        } catch (RuntimeException ex) {
+            return ResponseEntity.badRequest().body("Error: " + ex.getMessage());
+        }
     }
 }

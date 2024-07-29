@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
 
@@ -42,10 +44,12 @@ public class User {
     private String selfIntroduction;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
+    @CreationTimestamp
     @Column(name = "signup_date", nullable = false)
     private Instant signupDate;
 
     @Column(name = "update_date")
+    @UpdateTimestamp
     private Instant updateDate;
 
 }
