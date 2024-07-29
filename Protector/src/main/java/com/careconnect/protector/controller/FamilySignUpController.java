@@ -25,13 +25,13 @@ public class FamilySignUpController {
             return bindingResult.getAllErrors().toString();
         }
 
-//        if (!FamilySignUpDTO.getPassword().equals(FamilySignUpDTO.getConfirmPassword())) {
-//            bindingResult.rejectValue("confirmPassword", "confirmPassword.invalid",
-//                    "2개의 비밀번호가 일치하지 않습니다.");
-//            return bindingResult.getAllErrors().toString();
-//        }
+        if (!familySignUpDTO.getPassword().equals(familySignUpDTO.getConfirmPassword())) {
+            bindingResult.rejectValue("confirmPassword", "confirmPassword.invalid",
+                    "2개의 비밀번호가 일치하지 않습니다.");
+            return bindingResult.getAllErrors().toString();
+        }
 
-        familySignUpService.signUp(familySignUpDTO.getFamilyPhoneId(), familySignUpDTO.getName(),
+        familySignUpService.signUp(familySignUpDTO.getFamilyPhoneId(), familySignUpDTO.getPassword(), familySignUpDTO.getName(),
                 familySignUpDTO.getRelation(), familySignUpDTO.getEmail(), familySignUpDTO.getAddress(),
                 familySignUpDTO.getProfilePhoto(), familySignUpDTO.getNickname(), familySignUpDTO.getSelfIntroduction(),
                 familySignUpDTO.getSignupDate(), familySignUpDTO.getUpdateDate());

@@ -9,8 +9,8 @@ import java.time.Instant;
 @Setter
 public class FamilySignUpDTO {
     private String familyPhoneId;
-//    private String password;
-//    private String confirmPassword;
+    private String password;
+    private String confirmPassword;
     private String name;
     private String relation;
     private String email;
