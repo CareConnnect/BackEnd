@@ -14,13 +14,14 @@ public class FamilySignUpService {
     private final FamilyRepository familyRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public void signUp(String familyPhoneId, /*String password, String confirmPassword,*/
+    public void signUp(String familyPhoneId, String password,
                        String name, String relation, String email, String address,
                        String profilePhoto, String nickname, String selfIntroduction,
                        Instant signupDate, Instant updateDate) {
         FamilyMember family = new FamilyMember();
 
         family.setFamilyPhoneId(familyPhoneId);
+        family.setPassword(passwordEncoder.encode(password));
         family.setName(name);
         family.setRelation(relation);
         family.setEmail(email);
