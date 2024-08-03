@@ -47,4 +47,20 @@ public class FamilySignUpController {
             return ResponseEntity.badRequest().body("Error: " + ex.getMessage());
         }
     }
+
+    @PatchMapping("/update")
+    public ResponseEntity<String> update(@RequestBody FamilySignUpDTO familySignUpDTO) {
+        try {
+            familySignUpService.update(familySignUpDTO.getFamilyPhoneId(), familySignUpDTO.getPassword(),
+                    familySignUpDTO.getName(), familySignUpDTO.getRelation(), familySignUpDTO.getEmail(),
+                    familySignUpDTO.getAddress(), familySignUpDTO.getProfilePhoto(), familySignUpDTO.getNickname(),
+                    familySignUpDTO.getSelfIntroduction(), familySignUpDTO.getSignupDate(), familySignUpDTO.getUpdateDate());
+
+            return ResponseEntity.ok().body("Family with familyPhoneId " + familySignUpDTO.getFamilyPhoneId()+ " has been successfully changed.");
+        } catch (RuntimeException ex) {
+            return ResponseEntity.badRequest().body("Error: " + ex.getMessage());
+        }
+
+
+    }
 }
