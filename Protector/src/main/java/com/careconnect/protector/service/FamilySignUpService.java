@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -33,5 +34,18 @@ public class FamilySignUpService {
         family.setUpdateDate(updateDate);
 
         this.familyRepository.save(family);
+    }
+
+    public void withdraw(String familyPhoneId) {
+        Optional<FamilyMember> familyOptional = Optional.ofNullable(familyRepository.findByFamilyPhoneId(familyPhoneId));
+
+        // 사용자가 존재하는지 확인
+        if (familyOptional.isPresent()) {
+            FamilyMember family = familyOptional.get();
+            familyRepository.delete(family);
+        } else {
+            System.out.println("No family found with familyPhoneId: " + familyPhoneId);
+            throw new RuntimeException("No family found with familyPhoneId: " + familyPhoneId);
+        }
     }
 }

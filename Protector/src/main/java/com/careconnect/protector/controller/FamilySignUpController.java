@@ -4,12 +4,10 @@ import com.careconnect.protector.DTO.FamilySignUpDTO;
 import com.careconnect.protector.service.FamilySignUpService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -37,5 +35,16 @@ public class FamilySignUpController {
                 familySignUpDTO.getSignupDate(), familySignUpDTO.getUpdateDate());
 
         return "회원 가입 성공!!";
+    }
+
+    @DeleteMapping("/withdraw")
+    public ResponseEntity<String> withdraw(@RequestBody FamilySignUpDTO familySignUpDTO) {
+        try {
+            familySignUpService.withdraw(familySignUpDTO.getFamilyPhoneId());
+
+            return ResponseEntity.ok().body("Family with familyPhoneId " + familySignUpDTO.getFamilyPhoneId()+ " has been successfully deleted.");
+        } catch (RuntimeException ex) {
+            return ResponseEntity.badRequest().body("Error: " + ex.getMessage());
+        }
     }
 }
