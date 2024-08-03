@@ -47,4 +47,22 @@ public class UserSignUpController {
             return ResponseEntity.badRequest().body("Error: " + ex.getMessage());
         }
     }
+
+    @PatchMapping("/update")
+    public ResponseEntity<String> updateuserdata(@RequestBody UserSignUpDTO userSignUpDTO) {
+        try {
+            if (!userSignUpDTO.getPassword().equals(userSignUpDTO.getConfirmPassword())) {
+                return ResponseEntity.badRequest().body("2개의 비밀번호가 일치하지 않습니다.");
+            }
+
+            userSignUpService.update(userSignUpDTO.getUserPhoneId(), userSignUpDTO.getPassword(),
+                    userSignUpDTO.getName(), userSignUpDTO.getEmail(), userSignUpDTO.getAddress(),
+                    userSignUpDTO.getProfilePhoto(), userSignUpDTO.getNickname(), userSignUpDTO.getSelfIntroduction(),
+                    userSignUpDTO.getSignupDate(), userSignUpDTO.getUpdateDate());
+
+            return ResponseEntity.ok().body("User with userPhoneId " + userSignUpDTO.getUserPhoneId() +  " has been successfully changed.");
+        } catch (RuntimeException ex) {
+            return ResponseEntity.badRequest().body("Error: " + ex.getMessage());
+        }
+    }
 }

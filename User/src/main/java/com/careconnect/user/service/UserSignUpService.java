@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -43,6 +44,32 @@ public class UserSignUpService {
             userRepository.delete(user);
         } else {
             System.out.println("No user found with userPhoneId: " + userPhoneId);
+            throw new RuntimeException("No user found with userPhoneId: " + userPhoneId);
+        }
+    }
+
+    public void update(String userPhoneId, String password, String name, String email,
+                               String address, String profilePhoto, String nickname, String selfIntroduction,
+                               Instant signupDate, Instant updateDate) {
+        Optional<User> userOptional = Optional.ofNullable(userRepository.findByUserPhoneId(userPhoneId));
+
+        // 사용자가 존재하는지 확인
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+
+            user.setUserPhoneId(userPhoneId);
+            user.setPassword(passwordEncoder.encode(password));
+            user.setName(name);
+            user.setEmail(email);
+            user.setAddress(address);
+            user.setProfilePhoto(profilePhoto);
+            user.setNickname(nickname);
+            user.setSelfIntroduction(selfIntroduction);
+            user.setSignupDate(signupDate);
+            user.setUpdateDate(updateDate);
+
+            this.userRepository.save(user);
+        } else {
             throw new RuntimeException("No user found with userPhoneId: " + userPhoneId);
         }
     }
